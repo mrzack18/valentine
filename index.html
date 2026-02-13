@@ -3,171 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Valentine buat Ayanggg Aku Paling Cantk Se Bumi  🍫</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <title>Valentine buat Ayanggg Aku Paling Cantk Se Bumi 🍫</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --choco: #4e342e; 
-            --gold: #d4af37; 
-            --cream: #fff8e1; 
-            --soft-pink: #ffcad4;
-        }
-        body, html { 
-            height: 100%; 
-            margin: 0; 
-            font-family: 'Quicksand', sans-serif; 
-            background-color: var(--cream); 
-            overflow: hidden; 
-            touch-action: manipulation; /* Mencegah zoom yang tidak disengaja */
-        }
+        body { font-family: 'Quicksand', sans-serif; overflow: hidden; touch-action: manipulation; }
+        .handwritten { font-family: 'Caveat', cursive; }
         
-        .handwritten { font-family: 'Caveat', cursive; color: var(--choco); font-size: 4rem; }
-
-        .page-wrapper {
+        #wrapper {
             display: flex;
-            width: 400%; 
-            height: 100%;
+            width: 400%;
+            height: 100vh;
             transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
         }
+        
+        section { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
 
-        section {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .choco-card {
-            background: #ffffff;
-            border-radius: 30px;
-            padding: 30px;
-            box-shadow: 0 15px 40px rgba(78, 52, 46, 0.15);
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            border: 3px solid var(--choco);
-            position: relative;
-        }
-
-        /* Labirin Gelap Senter */
+        /* Game Area Torch Effect */
         #gameArea {
             position: relative;
             width: 280px;
             height: 320px;
             background: #1a1a1a;
-            margin: 15px auto;
-            border-radius: 15px;
+            border-radius: 1.5rem;
             overflow: hidden;
-            touch-action: none; /* PENTING: Mematikan scroll saat di area game */
+            touch-action: none;
             background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(212, 175, 55, 0.3) 0%, rgba(0,0,0,1) 15%);
+            border: 3px solid #4e342e;
         }
 
-        .wall {
-            position: absolute;
-            background: rgba(78, 52, 46, 0.1); 
-            z-index: 5;
-        }
-
-        #player {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: var(--gold);
-            border-radius: 3px;
-            z-index: 10;
-            display: none;
-            box-shadow: 0 0 10px var(--gold);
-            pointer-events: none;
-        }
-
-        .zone {
-            position: absolute; padding: 10px; font-size: 11px; font-weight: bold; z-index: 20;
-        }
-        #startZone { left: 0; top: 0; background: var(--choco); color: white; }
-        #finishZone { right: 0; bottom: 0; background: var(--gold); color: white; }
-
-        .btn-choco {
-            background-color: var(--choco);
-            color: white;
-            border-radius: 15px;
-            padding: 12px 35px;
-            border: none;
-            font-weight: 600;
-            margin-top: 20px;
-            transition: 0.3s;
-        }
-        .btn-choco:hover { transform: scale(1.05); background-color: #3e2723; }
-
+        .wall { position: absolute; background: rgba(78, 52, 46, 0.15); border-radius: 4px; z-index: 5; }
+        
         .choco-drop {
-            position: fixed;
-            top: -50px;
-            font-size: 24px;
-            z-index: 999;
-            pointer-events: none;
+            position: fixed; top: -50px; font-size: 24px; z-index: 999; pointer-events: none;
             animation: fall linear forwards;
         }
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+        
+        .floating { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
     </style>
 </head>
-<body>
+<body class="bg-[#fff8e1]">
 
-<div class="page-wrapper" id="wrapper">
-    
-    <section>
-        <div class="choco-card">
-            <h1 class="handwritten">Happy Valentine..</h1>
-            <p class="mt-3">Buat <b>Ayanggg Aku Paling Cantk Se Bumi</b>, orang paling manis yang aku kenal. Karena ini hari kasih sayang, aku buatin sesuatu yang (semoga) bikin kamu seneng.</p>
-            <button class="btn-choco" onclick="nextPage(1)">Buka Kado ✨</button>
-        </div>
-    </section>
-
-    <section>
-        <div class="choco-card">
-            <h2 class="handwritten" style="font-size: 3rem;">Manisnya Kamu..</h2>
-            <div class="mt-4">
-                <p>Kalau coklat itu manis, buat aku kamu jauh lebih manis. Aku beneran bersyukur bisa sama kamu terus sampe sekarang.</p>
-                <p class="mt-2 fw-bold" style="color: var(--choco);">Tetep jadi Ayanggg yang aku kenal ya? 🍫</p>
+    <div id="wrapper">
+        <section class="bg-gradient-to-b from-[#ffcad4] to-[#fff8e1]">
+            <div class="bg-white/90 backdrop-blur-sm p-8 rounded-[2.5rem] shadow-xl border-2 border-[#4e342e] max-w-sm w-full text-center">
+                <h1 class="handwritten text-6xl text-[#4e342e] mb-4 floating">Happy Valentine..</h1>
+                <p class="text-[#4e342e] leading-relaxed">Buat <b>Ayanggg Aku Paling Cantk Se Bumi</b>, orang paling manis yang aku kenal. Karena ini hari kasih sayang, aku buatin sesuatu yang (semoga) bikin kamu seneng.</p>
+                <button onclick="nextPage(1)" class="mt-8 bg-[#4e342e] hover:bg-[#3e2723] text-white px-10 py-3 rounded-full font-bold transition-all transform hover:scale-105 shadow-lg">
+                    Buka Kado ✨
+                </button>
             </div>
-            <button class="btn-custom btn-choco" onclick="nextPage(2)">Lanjut tantangan..</button>
-        </div>
-    </section>
+        </section>
 
-    <section>
-        <div class="choco-card">
-            <h3 class="fw-bold mb-2" style="color: var(--choco);">Labirin Coklat 🍫</h3>
-            <p class="small text-muted" style="font-size: 12px;"><b>Cara Main:</b> Tahan & geser kotak emas dari START ke FINISH. Jangan kena dinding!</p>
-            
-            <div id="gameArea">
-                <div id="startZone" class="zone">START</div>
-                <div id="finishZone" class="zone">FINISH</div>
-                <div id="player"></div>
-
-                <div class="wall" style="left: 60px; top: 0; width: 30px; height: 250px;"></div>
-                <div class="wall" style="left: 130px; top: 70px; width: 30px; height: 250px;"></div>
-                <div class="wall" style="left: 200px; top: 0; width: 30px; height: 250px;"></div>
+        <section class="bg-gradient-to-t from-[#ffcad4] to-[#fff8e1]">
+            <div class="bg-white/90 p-8 rounded-[2.5rem] shadow-xl border-2 border-[#4e342e] max-w-sm w-full text-center relative overflow-hidden">
+                <h2 class="handwritten text-5xl text-[#4e342e] mb-6">Manisnya Kamu..</h2>
+                <div class="space-y-4 text-[#4e342e]">
+                    <p>Kalau coklat itu manis, buat aku kamu jauh lebih manis. Aku beneran bersyukur bisa sama kamu terus sampe sekarang.</p>
+                    <p class="font-bold text-lg mt-4">Tetep jadi Ayanggg yang aku kenal ya? 🍫</p>
+                </div>
+                <button onclick="nextPage(2)" class="mt-8 border-2 border-[#4e342e] text-[#4e342e] px-8 py-2 rounded-full font-bold hover:bg-[#4e342e] hover:text-white transition-all shadow-md">
+                    Lanjut tantangan..
+                </button>
             </div>
-            <p id="gameMsg" class="mt-2 small fw-bold" style="color: var(--choco);">Sentuh kotak START untuk mulai!</p>
-        </div>
-    </section>
+        </section>
 
-    <section>
-        <div class="choco-card" style="border: 5px solid var(--gold);">
-            <h1 class="handwritten" style="font-size: 5rem; color: var(--gold);">You Win!</h1>
-            <div class="p-3 bg-light rounded-3 mt-3 border border-warning">
-                <p class="mb-0">Selamat Ayanggg! Kamu berhasil ngelewatin labirinnya. Sesuai janji...</p>
-                <hr>
-                <h4 class="fw-bold mb-0" style="color: var(--choco);">🍫 COKLAT BUAT KAMU! 🍫</h4>
+        <section class="bg-[#4e342e]">
+            <div class="bg-white p-6 rounded-[2rem] shadow-2xl max-w-sm w-full text-center">
+                <h3 class="font-bold text-xl text-[#4e342e] mb-1">Labirin Coklat 🍫</h3>
+                <p class="text-[10px] text-gray-500 mb-4 font-bold uppercase">Cara Main: Tahan & geser kotak emas dari START ke FINISH. Jangan kena dinding!</p>
+                
+                <div id="gameArea" class="mx-auto">
+                    <div id="startZone" class="absolute top-0 left-0 bg-[#4e342e] text-white text-[10px] font-bold px-2 py-1 z-20">START</div>
+                    <div id="finishZone" class="absolute bottom-0 right-0 bg-[#d4af37] text-white text-[10px] font-bold px-2 py-1 z-20">FINISH</div>
+                    <div id="player" class="absolute w-3 h-3 bg-[#d4af37] rounded-sm z-30 hidden shadow-[0_0_10px_#d4af37]"></div>
+
+                    <div class="wall" style="left: 60px; top: 0; width: 30px; height: 250px;"></div>
+                    <div class="wall" style="left: 130px; top: 70px; width: 30px; height: 250px;"></div>
+                    <div class="wall" style="left: 200px; top: 0; width: 30px; height: 250px;"></div>
+                </div>
+                
+                <p id="gameMsg" class="mt-4 text-sm font-bold text-[#4e342e]">Sentuh kotak START untuk mulai!</p>
             </div>
-            <p class="mt-4 small">SS ini, terus kirim ke aku sekarang ya!<br>Selamat hari Valentine, sayang.</p>
-        </div>
-    </section>
+        </section>
 
-</div>
+        <section class="bg-[#d4af37]">
+            <div class="bg-white p-8 rounded-[3rem] shadow-2xl border-4 border-[#4e342e] max-w-sm w-full text-center relative">
+                <h1 class="handwritten text-6xl text-[#d4af37] mb-4">You Win!</h1>
+                <div class="p-5 bg-gray-50 rounded-2xl border border-dashed border-[#d4af37] mb-6">
+                    <p class="text-sm">Selamat Ayanggg! Kamu berhasil ngelewatin labirinnya. Sesuai janji...</p>
+                    <hr class="my-3 border-[#d4af37]/30">
+                    <h4 class="font-black text-[#4e342e] text-xl tracking-wide">🍫 COKLAT BUAT KAMU! 🍫</h4>
+                </div>
+                <p class="text-[11px] text-[#4e342e] leading-relaxed">SS ini, terus kirim ke aku sekarang ya!<br><span class="font-bold text-lg">Selamat hari Valentine, sayang.</span></p>
+            </div>
+        </section>
+    </div>
 
 <script>
     const wrapper = document.getElementById('wrapper');
@@ -178,7 +114,7 @@
     }
 
     function createChoco() {
-        const icons = ['🍫', '❤️', '🍪', '🍬'];
+        const icons = ['🍫', '❤️', '🍪', '🍬', '✨'];
         const drop = document.createElement('div');
         drop.className = 'choco-drop';
         drop.innerText = icons[Math.floor(Math.random() * icons.length)];
@@ -217,7 +153,6 @@
     }
 
     function handleInput(e) {
-        // Mendapatkan posisi input (mouse atau touch)
         let clientX, clientY;
         if (e.type.includes('touch')) {
             clientX = e.touches[0].clientX;
@@ -231,11 +166,9 @@
         const x = clientX - rect.left;
         const y = clientY - rect.top;
 
-        // Efek Senter
         gameArea.style.setProperty('--x', x + 'px');
         gameArea.style.setProperty('--y', y + 'px');
 
-        // Deteksi Start Manual (agar lebih akurat di HP)
         const sRect = startZone.getBoundingClientRect();
         if (clientX >= sRect.left && clientX <= sRect.right && clientY >= sRect.top && clientY <= sRect.bottom) {
             if(!isPlaying) startGame();
@@ -243,21 +176,17 @@
 
         if (!isPlaying) return;
 
-        // Gerakkan player
         player.style.left = (x - 6) + 'px';
         player.style.top = (y - 6) + 'px';
 
-        // Deteksi Finish
         const fRect = finishZone.getBoundingClientRect();
         if (clientX >= fRect.left && clientX <= fRect.right && clientY >= fRect.top && clientY <= fRect.bottom) {
             winGame();
         }
 
-        // Cek Tabrakan Dinding
         walls.forEach(w => {
             const wRect = w.getBoundingClientRect();
             const pRect = player.getBoundingClientRect();
-
             if (pRect.left < wRect.right && pRect.right > wRect.left &&
                 pRect.top < wRect.bottom && pRect.bottom > wRect.top) {
                 resetGame();
@@ -265,22 +194,13 @@
         });
     }
 
-    // Listener untuk PC
     gameArea.addEventListener('mousemove', handleInput);
-    
-    // Listener untuk Mobile (HP)
     gameArea.addEventListener('touchstart', handleInput, {passive: false});
     gameArea.addEventListener('touchmove', (e) => {
-        e.preventDefault(); // Mengunci scroll layar
+        e.preventDefault(); 
         handleInput(e);
     }, {passive: false});
 
 </script>
-
 </body>
 </html>
-
-
-
-
-
