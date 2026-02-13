@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Valentine buat Kailla Salsabilla 🍫</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
@@ -13,7 +13,14 @@
             --cream: #fff8e1; 
             --soft-pink: #ffcad4;
         }
-        body, html { height: 100%; margin: 0; font-family: 'Quicksand', sans-serif; background-color: var(--cream); overflow: hidden; }
+        body, html { 
+            height: 100%; 
+            margin: 0; 
+            font-family: 'Quicksand', sans-serif; 
+            background-color: var(--cream); 
+            overflow: hidden; 
+            touch-action: manipulation; /* Mencegah zoom yang tidak disengaja */
+        }
         
         .handwritten { font-family: 'Caveat', cursive; color: var(--choco); font-size: 4rem; }
 
@@ -36,9 +43,9 @@
         .choco-card {
             background: #ffffff;
             border-radius: 30px;
-            padding: 40px;
+            padding: 30px;
             box-shadow: 0 15px 40px rgba(78, 52, 46, 0.15);
-            max-width: 450px;
+            max-width: 400px;
             width: 100%;
             text-align: center;
             border: 3px solid var(--choco);
@@ -48,32 +55,32 @@
         /* Labirin Gelap Senter */
         #gameArea {
             position: relative;
-            width: 300px;
-            height: 350px;
+            width: 280px;
+            height: 320px;
             background: #1a1a1a;
-            margin: 0 auto;
+            margin: 15px auto;
             border-radius: 15px;
             overflow: hidden;
-            cursor: none;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(212, 175, 55, 0.25) 0%, rgba(0,0,0,1) 12%);
+            touch-action: none; /* PENTING: Mematikan scroll saat di area game */
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(212, 175, 55, 0.3) 0%, rgba(0,0,0,1) 15%);
         }
 
         .wall {
             position: absolute;
-            background: rgba(78, 52, 46, 0.05); /* Dinding warna coklat tipis */
+            background: rgba(78, 52, 46, 0.1); 
             z-index: 5;
         }
 
         #player {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             background: var(--gold);
-            border-radius: 2px; /* Mirip kepingan coklat kecil */
+            border-radius: 3px;
             z-index: 10;
-            pointer-events: none;
             display: none;
             box-shadow: 0 0 10px var(--gold);
+            pointer-events: none;
         }
 
         .zone {
@@ -89,12 +96,11 @@
             padding: 12px 35px;
             border: none;
             font-weight: 600;
-            margin-top: 25px;
+            margin-top: 20px;
             transition: 0.3s;
         }
         .btn-choco:hover { transform: scale(1.05); background-color: #3e2723; }
 
-        /* Partikel Coklat Jatuh */
         .choco-drop {
             position: fixed;
             top: -50px;
@@ -133,20 +139,19 @@
 
     <section>
         <div class="choco-card">
-            <h3 class="fw-bold mb-3" style="color: var(--choco);">Labirin Coklat 🍫</h3>
-            <p class="small text-muted">Arahin kursor ke kotak coklat (START) terus ke kotak emas (FINISH). Jangan kena dinding!</p>
+            <h3 class="fw-bold mb-2" style="color: var(--choco);">Labirin Coklat 🍫</h3>
+            <p class="small text-muted" style="font-size: 12px;"><b>Cara Main:</b> Tahan & geser kotak emas dari START ke FINISH. Jangan kena dinding!</p>
             
             <div id="gameArea">
-                <div id="startZone" class="zone" onmouseover="startGame()">START</div>
-                <div id="finishZone" class="zone" onmouseover="winGame()">FINISH</div>
+                <div id="startZone" class="zone">START</div>
+                <div id="finishZone" class="zone">FINISH</div>
                 <div id="player"></div>
 
-                <div class="wall" style="left: 60px; top: 0; width: 30px; height: 280px;"></div>
-                <div class="wall" style="left: 130px; top: 70px; width: 30px; height: 280px;"></div>
-                <div class="wall" style="left: 200px; top: 0; width: 30px; height: 280px;"></div>
-                <div class="wall" style="left: 270px; top: 70px; width: 30px; height: 280px;"></div>
+                <div class="wall" style="left: 60px; top: 0; width: 30px; height: 250px;"></div>
+                <div class="wall" style="left: 130px; top: 70px; width: 30px; height: 250px;"></div>
+                <div class="wall" style="left: 200px; top: 0; width: 30px; height: 250px;"></div>
             </div>
-            <p id="gameMsg" class="mt-3 small fw-bold" style="color: var(--choco);">Mulai dari kotak coklat pojok kiri atas!</p>
+            <p id="gameMsg" class="mt-2 small fw-bold" style="color: var(--choco);">Sentuh kotak START untuk mulai!</p>
         </div>
     </section>
 
@@ -168,12 +173,10 @@
     const wrapper = document.getElementById('wrapper');
     let isPlaying = false;
 
-    // Fungsi Pindah Halaman
     function nextPage(index) {
         wrapper.style.transform = `translateX(-${index * 100}vw)`;
     }
 
-    // Efek Coklat Jatuh
     function createChoco() {
         const icons = ['🍫', '❤️', '🍪', '🍬'];
         const drop = document.createElement('div');
@@ -186,23 +189,24 @@
     }
     setInterval(createChoco, 400);
 
-    // Logic Game
     const gameArea = document.getElementById('gameArea');
     const player = document.getElementById('player');
     const walls = document.querySelectorAll('.wall');
+    const startZone = document.getElementById('startZone');
+    const finishZone = document.getElementById('finishZone');
 
     function startGame() {
         isPlaying = true;
         player.style.display = 'block';
-        document.getElementById('gameMsg').innerText = "Awas nabrak dinding!";
+        document.getElementById('gameMsg').innerText = "Geser terus, jangan kena dinding!";
     }
 
     function resetGame() {
         if(!isPlaying) return;
         isPlaying = false;
         player.style.display = 'none';
-        alert("Yah nabrak! Pelan-pelan Kailla, ulangi dari kotak START ya ❤️");
-        document.getElementById('gameMsg').innerText = "Mulai lagi dari kotak START..";
+        alert("Yah nabrak! Pelan-pelan Kailla, ulangi dari START ya ❤️");
+        document.getElementById('gameMsg').innerText = "Sentuh START lagi untuk mengulang..";
     }
 
     function winGame() {
@@ -212,19 +216,44 @@
         }
     }
 
-    gameArea.addEventListener('mousemove', (e) => {
-        const rect = gameArea.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    function handleInput(e) {
+        // Mendapatkan posisi input (mouse atau touch)
+        let clientX, clientY;
+        if (e.type.includes('touch')) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
 
+        const rect = gameArea.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        // Efek Senter
         gameArea.style.setProperty('--x', x + 'px');
         gameArea.style.setProperty('--y', y + 'px');
 
+        // Deteksi Start Manual (agar lebih akurat di HP)
+        const sRect = startZone.getBoundingClientRect();
+        if (clientX >= sRect.left && clientX <= sRect.right && clientY >= sRect.top && clientY <= sRect.bottom) {
+            if(!isPlaying) startGame();
+        }
+
         if (!isPlaying) return;
 
-        player.style.left = (x - 5) + 'px';
-        player.style.top = (y - 5) + 'px';
+        // Gerakkan player
+        player.style.left = (x - 6) + 'px';
+        player.style.top = (y - 6) + 'px';
 
+        // Deteksi Finish
+        const fRect = finishZone.getBoundingClientRect();
+        if (clientX >= fRect.left && clientX <= fRect.right && clientY >= fRect.top && clientY <= fRect.bottom) {
+            winGame();
+        }
+
+        // Cek Tabrakan Dinding
         walls.forEach(w => {
             const wRect = w.getBoundingClientRect();
             const pRect = player.getBoundingClientRect();
@@ -234,7 +263,18 @@
                 resetGame();
             }
         });
-    });
+    }
+
+    // Listener untuk PC
+    gameArea.addEventListener('mousemove', handleInput);
+    
+    // Listener untuk Mobile (HP)
+    gameArea.addEventListener('touchstart', handleInput, {passive: false});
+    gameArea.addEventListener('touchmove', (e) => {
+        e.preventDefault(); // Mengunci scroll layar
+        handleInput(e);
+    }, {passive: false});
+
 </script>
 
 </body>
